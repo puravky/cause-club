@@ -5,7 +5,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { format } from "date-fns";
-import { CalendarIcon, Plus, Minus, Info } from "lucide-react";
+import { CalendarIcon, Plus, Minus, Info, Target } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -195,7 +195,18 @@ export function ScoreForm({ onSuccess, oldestScoreDate }: ScoreFormProps) {
         </div>
 
         {/* Warning Badge if 5 scores logged */}
-        {oldestScoreDate && (
+        {/* Golf Motivation */}
+        <div className="flex items-start gap-2.5 rounded-xl bg-coral/5 border border-coral/10 p-3.5 text-xs">
+          <Target className="h-4 w-4 shrink-0 text-accent mt-0.5" />
+          <div>
+            <span className="font-semibold text-ink">Lower handicap, higher stakes</span>
+            <span className="text-[#6B7280]">
+              {" "}&mdash; The better your stableford score, the more numbers you match. Every point counts.
+            </span>
+          </div>
+        </div>
+
+          {oldestScoreDate && (
           <div className="flex items-start gap-2.5 rounded-xl bg-amber-50/50 border border-amber-200/40 p-3.5 text-xs text-amber-800 animate-in fade-in slide-in-from-top-1 duration-200">
             <Info className="h-4 w-4 shrink-0 text-amber-600 mt-0.5" />
             <div>

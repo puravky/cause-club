@@ -33,6 +33,29 @@ export default async function DashboardDrawsPage() {
     .select("score, date")
     .eq("user_id", user.id);
 
+  // 4. Fetch winner records with draw join
+  const { data: winnerRows } = await supabase
+    .from("winners")
+    .select(`
+      id,
+      draw_id,
+      match_count,
+      prize_amount,
+      status,
+      proof_url,
+      created_at,
+      draws (
+        id,
+        month,
+        year,
+        drawn_numbers,
+        jackpot_amount,
+        status
+      )
+    `)
+    .eq("user_id", user.id)
+    .order("created_at", { ascending: false });
+
   // Format types safely
   const formattedDraws = (draws || []).map((d) => ({
     id: d.id,
@@ -60,11 +83,36 @@ export default async function DashboardDrawsPage() {
     date: s.date,
   }));
 
+  const formattedWinners = (winnerRows || []).map((w) => {
+    const drawArray = w.draws as { id: string; month: number; year: number; drawn_numbers: number[] | null; jackpot_amount: number; status: string }[] | null;
+    const drawData = drawArray?.[0] ?? null;
+    return {
+      id: w.id,
+      draw_id: w.draw_id,
+      match_count: Number(w.match_count),
+      prize_amount: Number(w.prize_amount),
+      status: w.status,
+      proof_url: w.proof_url,
+      created_at: w.created_at,
+      draw: drawData
+        ? {
+            id: drawData.id,
+            month: Number(drawData.month),
+            year: Number(drawData.year),
+            drawn_numbers: drawData.drawn_numbers,
+            jackpot_amount: Number(drawData.jackpot_amount),
+            status: drawData.status,
+          }
+        : null,
+    };
+  });
+
   return (
     <DrawsDashboardClient
       draws={formattedDraws}
       results={formattedResults}
       scores={formattedScores}
+      winners={formattedWinners}
     />
   );
 }

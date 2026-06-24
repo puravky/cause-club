@@ -1,14 +1,14 @@
 "use client";
 
 import { m } from "framer-motion";
-import { Users, HandCoins, ShieldCheck, Scale } from "lucide-react";
+import { Users, HandCoins, ShieldCheck, Flag } from "lucide-react";
 import { fadeIn, stagger } from "@/lib/motion";
 
 const stats = [
   { icon: Users, value: "1,247", label: "Active players" },
   { icon: HandCoins, value: "£48k", label: "Donated to charity" },
+  { icon: Flag, value: "18", label: "Holes per round" },
   { icon: ShieldCheck, value: "Verified", label: "by Stripe" },
-  { icon: Scale, value: "Exempt", label: "UK Gambling Commission" },
 ];
 
 export function TrustBar() {

@@ -29,6 +29,22 @@ export async function POST(req: Request) {
     return new NextResponse(`Webhook Error: ${message}`, { status: 400 });
   }
 
+  // Return 200 early for unknown event types
+  if (!event.type.startsWith("checkout.session.") &&
+      !event.type.startsWith("customer.subscription.") &&
+      !event.type.startsWith("invoice.") &&
+      event.type !== "charge.refunded") {
+    console.log(`Unrecognised event type: ${event.type}. Acknowledging.`);
+    return NextResponse.json({ received: true });
+  }
+
+  // Ignore events without a customer
+  const eventObj = event.data.object as unknown as Record<string, unknown>;
+  if (!eventObj.customer) {
+    console.log(`Event ${event.type} has no customer. Acknowledging.`);
+    return NextResponse.json({ received: true });
+  }
+
   const supabase = createServiceClient();
 
   try {
@@ -204,15 +220,20 @@ export async function POST(req: Request) {
 
         console.log(`Logging donation of £${donationAmount} (${donationPercentage}% of £${amountPaid}) to charity ${userProfile.charity_id}`);
 
-        const { error: donationErr } = await supabase.from("donations").insert({
+        try {
+          const { error: donationErr } = await supabase.from("donations").insert({
           user_id: userProfile.id,
           charity_id: userProfile.charity_id,
           amount: donationAmount,
           type: "subscription_percentage",
         });
 
-        if (donationErr) {
-          console.error("Failed to insert donation log record:", donationErr.message);
+          if (donationErr) {
+            console.error("Failed to insert donation log record:", donationErr.message);
+          }
+        } catch (donationInsertErr) {
+          console.error("Exception inserting donation:", donationInsertErr);
+          return new NextResponse("Webhook Processing Error: donation insert failed", { status: 500 });
         }
         break;
       }

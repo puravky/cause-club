@@ -67,7 +67,14 @@ export async function middleware(request: NextRequest) {
     .eq("id", user.id)
     .single();
 
-  // ── 3. Subscription validation (PRD §4: real-time on every request) ──
+  // ── 3. Admin route guard (check BEFORE subscription) ──
+  if (pathname.startsWith("/admin") && profile?.role !== "admin") {
+    const dashboardUrl = request.nextUrl.clone();
+    dashboardUrl.pathname = "/dashboard";
+    return NextResponse.redirect(dashboardUrl);
+  }
+
+  // ── 4. Subscription validation (PRD §4: real-time on every request) ──
   const activeStatuses = ["active", "trialing"];
   const hasActiveSubscription =
     profile?.subscription_status &&
@@ -77,13 +84,6 @@ export async function middleware(request: NextRequest) {
     const pricingUrl = request.nextUrl.clone();
     pricingUrl.pathname = "/pricing";
     return NextResponse.redirect(pricingUrl);
-  }
-
-  // ── 4. Admin route guard ──────────────────────
-  if (pathname.startsWith("/admin") && profile?.role !== "admin") {
-    const dashboardUrl = request.nextUrl.clone();
-    dashboardUrl.pathname = "/dashboard";
-    return NextResponse.redirect(dashboardUrl);
   }
 
   // ── 5. Onboarding / Charity selection guard ───

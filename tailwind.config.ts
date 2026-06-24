@@ -19,6 +19,7 @@ const config = {
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
         heading: ["var(--font-heading)", "Georgia", "ui-serif", "serif"],
+        fraunces: ["var(--font-heading)", "Georgia", "ui-serif", "serif"],
       },
       colors: {
         ink: "#0A0A0B",

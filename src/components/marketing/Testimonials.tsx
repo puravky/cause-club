@@ -11,7 +11,7 @@ const testimonials = [
     initials: "SK",
   },
   {
-    quote: "Finally a lottery that does not feel scummy. causeClub actually donates to real charities. I am in every month.",
+    quote: "Finally a prize draw that does not feel scummy. causeClub actually donates to real charities. I am in every month.",
     name: "Priya R.",
     initials: "PR",
   },

@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: "Is this legal?",
-    a: "Yes. causeClub operates under UK law as a prize draw, not a lottery. We are registered with and exempt from the Gambling Commission.",
+    a: "Yes. causeClub is a skill-based prize draw using Stableford scores. Not gambling. 18+. We are registered with and exempt from the Gambling Commission.",
   },
 ];
 

@@ -21,13 +21,19 @@ export default async function ScoresPage() {
     .order("date", { ascending: false })
     .order("created_at", { ascending: false });
 
-  // Map to correct types for the client component
-  const typedScores = (scores || []).map((s) => ({
-    id: s.id,
-    score: s.score,
-    date: s.date,
-    created_at: s.created_at,
-  }));
+  // Map to correct types for the client component with validation
+  const typedScores = (scores || []).map((s) => {
+    const scoreValue = Number(s.score);
+    if (scoreValue < 1 || scoreValue > 45) {
+      throw new Error("Score must be 1-45");
+    }
+    return {
+      id: s.id,
+      score: scoreValue,
+      date: s.date,
+      created_at: s.created_at,
+    };
+  });
 
   return <ScoresClient initialScores={typedScores} userId={user.id} />;
 }

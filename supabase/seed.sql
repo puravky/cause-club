@@ -150,3 +150,78 @@ VALUES (
   15000.00,
   now()
 ) ON CONFLICT (id) DO NOTHING;
+
+-- ─── 3. Seed Test Users ───────────────────────────────────────
+-- Delete old demo users if they exist
+DELETE FROM auth.users WHERE email IN ('demo@causeclub.com', 'demo@paritygolf.com', 'admin@causeclub.com', 'admin@paritygolf.com');
+
+-- Player user
+INSERT INTO auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, email_change, email_change_token_new, recovery_token)
+VALUES (
+  '00000000-0000-0000-0000-000000000000',
+  '00000000-0000-0000-0000-000000000001',
+  'authenticated',
+  'authenticated',
+  'player@causeclub.com',
+  crypt('CauseClub2026!', gen_salt('bf')),
+  now(),
+  '{"provider": "email", "providers": ["email"]}',
+  '{"role": "user", "full_name": "Alex Player"}',
+  now(),
+  now(),
+  '',
+  '',
+  '',
+  ''
+);
+
+-- Admin user
+INSERT INTO auth.users (instance_id, id, aud, role, email, encrypted_password, email_confirmed_at, raw_app_meta_data, raw_user_meta_data, created_at, updated_at, confirmation_token, email_change, email_change_token_new, recovery_token)
+VALUES (
+  '00000000-0000-0000-0000-000000000000',
+  '00000000-0000-0000-0000-000000000002',
+  'authenticated',
+  'authenticated',
+  'admin@causeclub.com',
+  crypt('AdminSecure2026!', gen_salt('bf')),
+  now(),
+  '{"provider": "email", "providers": ["email"]}',
+  '{"role": "admin", "full_name": "Admin User"}',
+  now(),
+  now(),
+  '',
+  '',
+  '',
+  ''
+);
+
+-- Insert user profiles into public.users
+INSERT INTO public.users (id, email, full_name, role, subscription_status, charity_id, charity_percentage, stripe_customer_id)
+VALUES (
+  '00000000-0000-0000-0000-000000000001',
+  'player@causeclub.com',
+  'Alex Player',
+  'user',
+  'active',
+  (SELECT id FROM public.charities ORDER BY created_at ASC LIMIT 1),
+  25,
+  'cus_test_player'
+) ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO public.users (id, email, full_name, role, subscription_status)
+VALUES (
+  '00000000-0000-0000-0000-000000000002',
+  'admin@causeclub.com',
+  'Admin User',
+  'admin',
+  'active'
+) ON CONFLICT (id) DO NOTHING;
+
+-- Insert 5 scores for player
+INSERT INTO public.scores (user_id, score, date, created_at)
+VALUES
+  ('00000000-0000-0000-0000-000000000001', 22, now() - interval '10 days', now() - interval '10 days'),
+  ('00000000-0000-0000-0000-000000000001', 31, now() - interval '8 days', now() - interval '8 days'),
+  ('00000000-0000-0000-0000-000000000001', 18, now() - interval '6 days', now() - interval '6 days'),
+  ('00000000-0000-0000-0000-000000000001', 40, now() - interval '4 days', now() - interval '4 days'),
+  ('00000000-0000-0000-0000-000000000001', 35, now() - interval '2 days', now() - interval '2 days');

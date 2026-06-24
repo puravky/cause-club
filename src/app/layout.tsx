@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
-import { Inter, Fraunces } from "next/font/google";
+import { Inter, Plus_Jakarta_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 import { MotionProvider } from "@/components/providers/MotionProvider";
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { Footer } from "@/components/marketing/Footer";
+
 import "./globals.css";
 
 const inter = Inter({
@@ -13,15 +14,15 @@ const inter = Inter({
   display: "swap",
 });
 
-const fraunces = Fraunces({
+const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
+  weight: ["400", "500", "700", "800"],
   variable: "--font-heading",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "causeClub — Play. Win. Give.",
+  title: "causeClub - Existing for a cause",
   description:
     "Win up to £10,000 every month. £9.99/month, 10% goes to the charity you choose.",
 };
@@ -32,11 +33,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={plusJakarta.variable} suppressHydrationWarning>
       <body
         className={cn(
           inter.variable,
-          fraunces.variable,
+          plusJakarta.variable,
           "font-sans antialiased"
         )}
       >

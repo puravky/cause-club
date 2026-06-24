@@ -33,6 +33,17 @@ const signUpSchema = z.object({
 type LoginValues = z.infer<typeof loginSchema>;
 type SignUpValues = z.infer<typeof signUpSchema>;
 
+/* ─── Spinner ──────────────────────────────── */
+
+function Spinner() {
+  return (
+    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+    </svg>
+  );
+}
+
 /* ─── Login Form ───────────────────────────── */
 
 function LoginForm({
@@ -82,19 +93,20 @@ function LoginForm({
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-lg">Welcome back</CardTitle>
-        <CardDescription>Sign in to your account to continue</CardDescription>
+        <CardTitle className="text-lg text-[#0A0A0B] dark:text-[#FAFAF9]">Welcome back</CardTitle>
+        <CardDescription className="text-[#0A0A0B]/60 dark:text-[#FAFAF9]/60">Sign in to your account to continue</CardDescription>
       </CardHeader>
 
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="login-email">Email</Label>
+            <Label htmlFor="login-email" className="font-medium text-[#0A0A0B] dark:text-[#FAFAF9]">Email</Label>
             <Input
               id="login-email"
               type="email"
               placeholder="you@example.com"
               autoComplete="email"
+              className="bg-transparent text-[#0A0A0B] dark:text-[#FAFAF9] placeholder:text-[#0A0A0B]/40 dark:placeholder:text-[#FAFAF9]/40 border-[#0A0A0B]/10 dark:border-[#FAFAF9]/10"
               {...register("email")}
             />
             {errors.email && (
@@ -103,12 +115,13 @@ function LoginForm({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="login-password">Password</Label>
+            <Label htmlFor="login-password" className="font-medium text-[#0A0A0B] dark:text-[#FAFAF9]">Password</Label>
             <Input
               id="login-password"
               type="password"
               placeholder="••••••••"
               autoComplete="current-password"
+              className="bg-transparent text-[#0A0A0B] dark:text-[#FAFAF9] placeholder:text-[#0A0A0B]/40 dark:placeholder:text-[#FAFAF9]/40 border-[#0A0A0B]/10 dark:border-[#FAFAF9]/10"
               {...register("password")}
             />
             {errors.password && (
@@ -138,7 +151,7 @@ function LoginForm({
           </Button>
         </form>
 
-        <div className="mt-6 text-center text-sm text-[#6B7280]">
+        <div className="mt-6 text-center text-sm text-[#0A0A0B]/60 dark:text-[#FAFAF9]/60">
           Don&apos;t have an account?{" "}
           <button
             type="button"
@@ -196,8 +209,8 @@ function SignUpForm({ onToggle }: { onToggle: () => void }) {
   return (
     <>
       <CardHeader>
-        <CardTitle className="text-lg">Create your account</CardTitle>
-        <CardDescription>Get started with causeClub today</CardDescription>
+        <CardTitle className="text-lg text-[#0A0A0B] dark:text-[#FAFAF9]">Create your account</CardTitle>
+        <CardDescription className="text-[#0A0A0B]/60 dark:text-[#FAFAF9]/60">Get started with causeClub today</CardDescription>
       </CardHeader>
 
       <CardContent>
@@ -218,11 +231,12 @@ function SignUpForm({ onToggle }: { onToggle: () => void }) {
           <>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="signup-name">Full name</Label>
+                <Label htmlFor="signup-name" className="font-medium text-[#0A0A0B] dark:text-[#FAFAF9]">Full name</Label>
                 <Input
                   id="signup-name"
                   placeholder="Jane Smith"
                   autoComplete="name"
+                  className="bg-transparent text-[#0A0A0B] dark:text-[#FAFAF9] placeholder:text-[#0A0A0B]/40 dark:placeholder:text-[#FAFAF9]/40 border-[#0A0A0B]/10 dark:border-[#FAFAF9]/10"
                   {...register("name")}
                 />
                 {errors.name && (
@@ -231,34 +245,32 @@ function SignUpForm({ onToggle }: { onToggle: () => void }) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="signup-email">Email</Label>
+                <Label htmlFor="signup-email" className="font-medium text-[#0A0A0B] dark:text-[#FAFAF9]">Email</Label>
                 <Input
                   id="signup-email"
                   type="email"
                   placeholder="you@example.com"
                   autoComplete="email"
+                  className="bg-transparent text-[#0A0A0B] dark:text-[#FAFAF9] placeholder:text-[#0A0A0B]/40 dark:placeholder:text-[#FAFAF9]/40 border-[#0A0A0B]/10 dark:border-[#FAFAF9]/10"
                   {...register("email")}
                 />
                 {errors.email && (
-                  <p className="text-xs text-red-500">
-                    {errors.email.message}
-                  </p>
+                  <p className="text-xs text-red-500">{errors.email.message}</p>
                 )}
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="signup-password">Password</Label>
+                <Label htmlFor="signup-password" className="font-medium text-[#0A0A0B] dark:text-[#FAFAF9]">Password</Label>
                 <Input
                   id="signup-password"
                   type="password"
                   placeholder="••••••••"
                   autoComplete="new-password"
+                  className="bg-transparent text-[#0A0A0B] dark:text-[#FAFAF9] placeholder:text-[#0A0A0B]/40 dark:placeholder:text-[#FAFAF9]/40 border-[#0A0A0B]/10 dark:border-[#FAFAF9]/10"
                   {...register("password")}
                 />
                 {errors.password && (
-                  <p className="text-xs text-red-500">
-                    {errors.password.message}
-                  </p>
+                  <p className="text-xs text-red-500">{errors.password.message}</p>
                 )}
               </div>
 
@@ -284,7 +296,7 @@ function SignUpForm({ onToggle }: { onToggle: () => void }) {
               </Button>
             </form>
 
-            <div className="mt-6 text-center text-sm text-[#6B7280]">
+            <div className="mt-6 text-center text-sm text-[#0A0A0B]/60 dark:text-[#FAFAF9]/60">
               Already have an account?{" "}
               <button
                 type="button"
@@ -301,45 +313,23 @@ function SignUpForm({ onToggle }: { onToggle: () => void }) {
   );
 }
 
-/* ─── Spinner ──────────────────────────────── */
-
-function Spinner() {
-  return (
-    <svg className="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
-      <circle
-        className="opacity-25"
-        cx="12"
-        cy="12"
-        r="10"
-        stroke="currentColor"
-        strokeWidth="4"
-      />
-      <path
-        className="opacity-75"
-        fill="currentColor"
-        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-      />
-    </svg>
-  );
-}
-
 /* ─── Login Page Content ───────────────────── */
 
 function LoginPageContent() {
   const [mode, setMode] = useState<"login" | "signup">("login");
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-paper px-4">
+    <main className="flex min-h-screen items-center justify-center bg-[#FAFAF9] dark:bg-[#0A0A0B] px-4">
       <div className="w-full max-w-[400px]">
         {/* Logo */}
         <div className="mb-8 text-center">
-          <h1 className="font-heading text-2xl font-semibold text-ink">
+          <h1 className="font-heading text-2xl font-semibold text-[#0A0A0B] dark:text-[#FAFAF9]">
             causeClub
           </h1>
-          <p className="mt-1 text-sm text-[#6B7280]">Play golf. Fund good.</p>
+          <p className="mt-1 text-sm text-[#0A0A0B]/60 dark:text-[#FAFAF9]/60">Play Golf, Find Good.</p>
         </div>
 
-        <Card>
+        <Card className="bg-[#FAFAF9] dark:bg-[#0A0A0B] border-[#0A0A0B]/10 dark:border-[#FAFAF9]/10">
           {mode === "login" ? (
             <LoginForm
               onSuccess={() => {}}
@@ -351,7 +341,7 @@ function LoginPageContent() {
         </Card>
 
         {/* Footer */}
-        <p className="mt-6 text-center text-xs text-[#6B7280]">
+        <p className="mt-6 text-center text-xs text-[#0A0A0B]/60 dark:text-[#FAFAF9]/60">
           By continuing you agree to our{" "}
           <a href="/terms" className="underline underline-offset-2">
             Terms

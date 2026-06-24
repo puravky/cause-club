@@ -86,7 +86,7 @@ export function CharityProfile({ charity, isLoggedIn }: CharityProfileProps) {
               <Heart className="w-6 h-6 text-emerald-600" />
             </div>
             <div>
-              <p className="text-sm font-semibold text-ink/60 uppercase tracking-wider">Total Raised</p>
+              <p className="text-sm font-semibold text-ink/60 uppercase tracking-wider">Donated by causeClub players</p>
               <p className="text-2xl font-bold text-ink">£{sumRaised.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             </div>
           </div>

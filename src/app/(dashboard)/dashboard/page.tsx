@@ -47,6 +47,17 @@ export default async function DashboardPage() {
     .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
+  // 4. Fetch total donations raised by this user for charity
+  const { data: userDonations } = await supabase
+    .from("donations")
+    .select("amount")
+    .eq("user_id", user.id);
+
+  const totalDonated = (userDonations || []).reduce(
+    (sum, d) => sum + Number(d.amount),
+    0
+  );
+
   // 3. Fetch user's profile and active charity details
   const { data: profile } = await supabase
     .from("users")
@@ -111,6 +122,7 @@ export default async function DashboardPage() {
       recentDraws={formattedDraws}
       winnings={formattedWinnings}
       charity={activeCharity}
+      totalDonated={totalDonated}
     />
   );
 }

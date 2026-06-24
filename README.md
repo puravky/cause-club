@@ -1,4 +1,4 @@
-# causeClub — Play. Win. Give.
+# causeClub — Play Golf, Find Good.
 Monthly prize draw where 10% always goes to charity you choose.
 
 Live Link: https://cause-club.vercel.app  
@@ -9,15 +9,15 @@ Live Link: https://cause-club.vercel.app
 
 | Role | Email | Password | What to test |
 | --- | --- | --- | --- |
-| User | demo@causeclub.com | Demo123! | Dashboard, add scores, view draws, claim win |
-| Admin | admin@causeclub.com | Admin123! | /admin/draws, simulate + publish, approve proof |
+| User | player@causeclub.com | CauseClub2026! | Dashboard, add scores, view draws, claim win |
+| Admin | admin@causeclub.com | AdminSecure2026! | /admin/draws, simulate + publish, approve proof |
 
-Stripe test card: `4242 4242 4242 4242` any future expiry, any CVC, any ZIP.
+Stripe test card: `4242 4242 4242 4242` any future expiry, any CVC, any ZIP. (e.g. 4242 4242 4242 4242, 12/34, 123, 12345)
 
 **Quick test flow:**
-1. Login as demo@causeclub.com → `/dashboard/scores` → add 5 scores: 10, 20, 30, 40, 45
+1. Login as player@causeclub.com → `/dashboard/scores` → add 5 scores: 10, 20, 30, 40, 45
 2. Login as admin@causeclub.com → `/admin/draws` → Simulate Draw → Publish
-3. Login as demo@causeclub.com → `/dashboard/draws` → see if you won → Claim → upload any jpg
+3. Login as player@causeclub.com → `/dashboard/draws` → see if you won → Claim → upload any jpg
 4. Login as admin@causeclub.com → `/admin/winners` → Approve
 5. Check Supabase `donations` table → verify 10% of subscription recorded
 
@@ -34,7 +34,7 @@ Stripe test card: `4242 4242 4242 4242` any future expiry, any CVC, any ZIP.
 6. `/dashboard/draws/:id/claim` → Upload proof if you win
 
 **Admin Journey:**
-1. `/admin` → View total users, active subs, donations, jackpot
+1. `/admin` → View total users, active subs, donations, monthly pool
 2. `/admin/draws` → Simulate draw with RNG, then Publish to all users
 3. `/admin/winners` → Review uploaded proof, Approve or Reject claims
 4. `/admin/charities` → Add, edit, or disable charities
@@ -77,7 +77,7 @@ Stripe test card: `4242 4242 4242 4242` any future expiry, any CVC, any ZIP.
 | Last 5 Stableford scores only | Done | `/supabase/migrations/002_trigger.sql` |
 | Auto entry to monthly draw | Done | Draw logic checks active subs + score count |
 | Prize split 40/35/25 for 5/4/3 matches | Done | `/app/(admin)/admin/draws/actions.ts#L89` |
-| Jackpot rollover if no 5-match winner | Done | `/app/(admin)/admin/draws/actions.ts` |
+| Monthly pool rollover if no 5-match winner | Done | `/app/(admin)/admin/draws/actions.ts` |
 | Winner verification with proof upload | Done | `/app/(dashboard)/dashboard/draws/[id]/claim/page.tsx` |
 | RLS on all user tables | Done | `/supabase/policies.sql` |
 | Admin panel for charities and draws | Done | `/app/(admin)/admin` |
@@ -112,3 +112,25 @@ Stripe test card: `4242 4242 4242 4242` any future expiry, any CVC, any ZIP.
 git clone https://github.com/yourusername/cause-club
 cd cause-club
 bun install
+```
+
+**2. Environment variables**
+Copy `.env.example` to `.env.local` and fill in Supabase + Stripe keys.
+
+**3. Database**
+```bash
+bunx supabase start
+bunx supabase db push
+bunx supabase db seed
+```
+
+**4. Stripe webhooks (local)**
+```bash
+stripe listen --forward-to localhost:3000/api/stripe/webhook
+stripe trigger checkout.session.completed
+```
+
+**5. Run**
+```bash
+bun run dev
+```

@@ -10,7 +10,7 @@ export function Footer() {
               causeClub
             </Link>
             <p className="mt-2 text-xs text-muted-foreground">
-              Play. Win. Give.
+              Play Golf, Find Good.
             </p>
           </div>
 

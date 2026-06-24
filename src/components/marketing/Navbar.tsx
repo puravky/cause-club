@@ -25,7 +25,7 @@ export function Navbar() {
             causeClub
           </span>
           <span className="hidden text-xs text-muted-foreground sm:inline-block">
-            Play. Win. Give.
+            Play Golf, Find Good.
           </span>
         </Link>
 

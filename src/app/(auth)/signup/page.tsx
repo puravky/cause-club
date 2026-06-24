@@ -31,10 +31,10 @@ export default async function SignUpPage() {
     .order("name", { ascending: true });
 
   return (
-    <div className="min-h-screen bg-paper flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAFAF9] dark:bg-[#0A0A0B] flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md text-center mb-8">
-        <h1 className="font-heading text-3xl font-bold text-ink">causeClub</h1>
-        <p className="text-ink/60 text-sm mt-1">Play golf. Fund good.</p>
+        <h1 className="font-heading text-3xl font-bold text-[#0A0A0B] dark:text-[#FAFAF9]">causeClub</h1>
+        <p className="text-[#0A0A0B]/60 dark:text-[#FAFAF9]/60 text-sm mt-1">Play Golf, Find Good.</p>
       </div>
 
       <SignUpFlow charities={charities || []} />

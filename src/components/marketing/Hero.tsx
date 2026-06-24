@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { useRef, useEffect } from "react";
-import { m, useMotionValue, useTransform, animate, useInView, useSpring } from "framer-motion";
-import { ArrowRight } from "lucide-react";
-import { fadeIn, stagger, spring } from "@/lib/motion";
+import { m, useMotionValue, useTransform, animate, useInView, useSpring, useScroll } from "framer-motion";
+import { ArrowRight, Target } from "lucide-react";
+import { fadeIn, stagger } from "@/lib/motion";
 
 function AnimatedCounter({ target, prefix = "" }: { target: number; prefix?: string }) {
   const count = useMotionValue(0);
@@ -48,10 +48,9 @@ function DrawNumbers() {
           {numbers.map((n, i) => (
             <m.div
               key={n}
-              initial={{ opacity: 0, y: 30, scale: 0.8 }}
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.15, ...spring }}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: i * 0.1, type: "spring", damping: 15 }}
               className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-accent bg-accent/10 will-change-transform sm:h-16 sm:w-16"
             >
               <span className="font-heading text-lg font-bold text-accent sm:text-xl">
@@ -65,6 +64,11 @@ function DrawNumbers() {
           <span>5 numbers drawn</span>
           <span className="h-1 w-1 rounded-full bg-muted-foreground" />
           <span>Random and verifiable</span>
+        </div>
+
+        <div className="mt-6 flex items-center justify-center gap-2 text-xs text-muted-foreground">
+          <Target className="h-3.5 w-3.5 text-accent" />
+          <span>Lower handicap, higher stakes</span>
         </div>
       </div>
 
@@ -83,6 +87,14 @@ export function Hero() {
     >
       <div className="absolute inset-0 bg-grid dark:bg-grid-dark" />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background via-transparent to-background" />
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <m.div
+          style={{
+            y: useTransform(useScroll().scrollY, [0, 300], [0, 100]),
+          }}
+          className="absolute -top-40 left-1/2 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-[#FF5C35]/20 blur-[120px]"
+        />
+      </div>
 
       <div className="relative mx-auto max-w-[1200px] px-6">
         <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-20">

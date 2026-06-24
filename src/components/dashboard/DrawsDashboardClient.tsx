@@ -55,10 +55,29 @@ interface Score {
   date: string;
 }
 
+interface WinnerWithDraw {
+  id: string;
+  draw_id: string;
+  match_count: number;
+  prize_amount: number;
+  status: string;
+  proof_url: string | null;
+  created_at: string;
+  draw: {
+    id: string;
+    month: number;
+    year: number;
+    drawn_numbers: number[] | null;
+    jackpot_amount: number;
+    status: string;
+  } | null;
+}
+
 interface DrawsDashboardClientProps {
   draws: Draw[];
   results: DrawResult[];
   scores: Score[];
+  winners: WinnerWithDraw[];
 }
 
 const MONTHS = [
@@ -89,7 +108,7 @@ const itemVariants = {
   },
 } as const;
 
-export function DrawsDashboardClient({ draws, results, scores }: DrawsDashboardClientProps) {
+export function DrawsDashboardClient({ draws, results, scores, winners }: DrawsDashboardClientProps) {
   const router = useRouter();
   const supabase = createClient();
 
@@ -151,7 +170,7 @@ export function DrawsDashboardClient({ draws, results, scores }: DrawsDashboardC
     <div className="space-y-8 max-w-4xl mx-auto px-4 sm:px-6">
       {/* Header */}
       <div>
-        <h1 className="font-heading text-3xl font-bold tracking-tight text-ink sm:text-4xl">Draws & Winnings</h1>
+        <h1 className="font-heading text-3xl font-bold tracking-tight text-ink sm:text-4xl">Draws &amp; Winnings</h1>
         <p className="mt-1.5 text-sm text-[#6B7280]">
           View active monthly draw results, verify your winnings, and review historical performance.
         </p>
@@ -432,6 +451,77 @@ export function DrawsDashboardClient({ draws, results, scores }: DrawsDashboardC
           </Card>
         </>
       )}
+
+          {/* Winners Section */}
+          {winners.length > 0 && (
+            <Card className="rounded-2xl border border-border bg-white shadow-sm">
+              <CardHeader>
+                <CardTitle className="font-heading text-lg font-semibold text-ink flex items-center gap-2">
+                  <Trophy className="h-5 w-5 text-accent" />
+                  Your Winner Records
+                </CardTitle>
+                <CardDescription>Officially confirmed wins from the winners table.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs">
+                    <thead>
+                      <tr className="bg-neutral-50/50 border-b border-border text-[#6B7280] font-semibold">
+                        <th className="p-3.5">Draw</th>
+                        <th className="p-3.5">Match</th>
+                        <th className="p-3.5">Prize</th>
+                        <th className="p-3.5">Status</th>
+                        <th className="p-3.5">Date</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {winners.map((w) => (
+                        <tr key={w.id} className="hover:bg-neutral-50/30 transition-colors">
+                          <td className="p-3.5 font-semibold text-ink">
+                            {w.draw
+                              ? `${MONTHS[w.draw.month - 1]} ${w.draw.year}`
+                              : "Unknown"}
+                          </td>
+                          <td className="p-3.5">
+                            <span className="inline-flex items-center justify-center rounded-full bg-accent/10 px-2.5 py-0.5 text-xs font-bold text-accent">
+                              {w.match_count}
+                            </span>
+                          </td>
+                          <td className="p-3.5 font-semibold text-ink">
+                            &pound;{w.prize_amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                          </td>
+                          <td className="p-3.5">
+                            <span
+                              className={cn(
+                                "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-semibold capitalize",
+                                w.status === "paid"
+                                  ? "bg-emerald-50 text-emerald-700"
+                                  : w.status === "approved"
+                                  ? "bg-blue-50 text-blue-700"
+                                  : "bg-amber-50 text-amber-700"
+                              )}
+                            >
+                              {w.status === "paid" ? (
+                                <CheckCircle2 className="h-3 w-3" />
+                              ) : (
+                                <Hourglass className="h-3 w-3" />
+                              )}
+                              {w.status}
+                            </span>
+                          </td>
+                          <td className="p-3.5 text-[#6B7280]">
+                            {w.created_at
+                              ? format(new Date(w.created_at), "d MMM yyyy")
+                              : "—"}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
       {/* Proof Upload Dialog */}
       <Dialog open={selectedResultId !== null} onOpenChange={() => setSelectedResultId(null)}>

@@ -39,6 +39,7 @@ interface DashboardClientProps {
   recentDraws: Draw[];
   winnings: DrawResultWithDraw[];
   charity: UserCharity | null;
+  totalDonated: number;
 }
 
 const MONTHS = [
@@ -46,7 +47,7 @@ const MONTHS = [
   "July", "August", "September", "October", "November", "December"
 ];
 
-export function DashboardClient({ recentDraws, winnings, charity }: DashboardClientProps) {
+export function DashboardClient({ recentDraws, winnings, charity, totalDonated }: DashboardClientProps) {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     if (params.get("checkout_success") === "true") {
@@ -87,7 +88,7 @@ export function DashboardClient({ recentDraws, winnings, charity }: DashboardCli
       </div>
 
       {/* Grid of Summary Metrics */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {/* Next Draw Card */}
         <Card className="rounded-2xl border border-border bg-white shadow-sm">
           <CardHeader className="pb-2">
@@ -173,6 +174,26 @@ export function DashboardClient({ recentDraws, winnings, charity }: DashboardCli
                 </Link>
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Raised for Charity Card */}
+        <Card className="rounded-2xl border border-border bg-white shadow-sm">
+          <CardHeader className="pb-2">
+            <CardDescription className="text-xs font-semibold uppercase tracking-wider text-[#6B7280] flex items-center gap-1.5">
+              <Heart className="h-3.5 w-3.5" />
+              Raised for Charity
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-1.5">
+              <span className="font-heading text-3xl font-bold text-emerald-600">
+                &pound;{totalDonated.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+              </span>
+              <p className="text-xs text-[#6B7280] pt-2 border-t border-border mt-2">
+                You have raised &pound;{totalDonated.toLocaleString(undefined, { minimumFractionDigits: 2 })} for charity through causeClub.
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>

@@ -4,5 +4,7 @@ export { TrustBar } from "./TrustBar";
 export { HowItWorks } from "./HowItWorks";
 export { ImpactSection } from "./ImpactSection";
 export { Testimonials } from "./Testimonials";
+export { PricingSection } from "./PricingSection";
 export { Faq } from "./Faq";
+export { FinalCta } from "./FinalCta";
 export { Footer } from "./Footer";

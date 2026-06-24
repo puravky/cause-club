@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { m } from "framer-motion";
 import { ArrowRight, Heart, Users, Coins } from "lucide-react";
+import { fadeIn } from "@/lib/motion";
 
 interface Charity {
   id: string;
@@ -21,39 +22,55 @@ interface CharitiesShowcaseProps {
   };
 }
 
+function Skeleton() {
+  return (
+    <div className="grid gap-6 md:grid-cols-3">
+      {[1, 2, 3].map((n) => (
+        <div key={n} className="animate-pulse rounded-2xl border border-border bg-muted p-5">
+          <div className="mb-4 h-44 rounded-lg bg-muted-foreground/20" />
+          <div className="mb-2 h-5 w-3/4 rounded bg-muted-foreground/20" />
+          <div className="h-4 w-full rounded bg-muted-foreground/10" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export function ImpactSection({ featuredCharities, stats }: CharitiesShowcaseProps) {
   const statItems = [
     { icon: Coins, value: `£${stats.totalDonated.toLocaleString("en-GB")}`, label: "Raised for charity" },
     { icon: Heart, value: String(stats.charitiesSupported), label: "Charities supported" },
-    { icon: Users, value: `${stats.playersCount > 0 ? stats.playersCount.toLocaleString("en-GB") : "1,247"}`, label: "Active players" },
+    { icon: Users, value: stats.playersCount > 0 ? stats.playersCount.toLocaleString("en-GB") : "1,247", label: "Active players" },
   ];
 
   return (
-    <section id="charities" className="border-t border-border py-24 lg:py-32">
+    <m.section
+      id="charities"
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-100px" }}
+      className="border-t border-border py-24 lg:py-32"
+    >
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <p className="mb-4 text-xs font-semibold uppercase tracking-widest text-accent">
             Impact
           </p>
           <h2 className="font-heading text-4xl font-bold tracking-tight sm:text-5xl">
-            Your play funds real change
+            Charity first, always
           </h2>
           <p className="mt-4 text-muted-foreground">
-            Every subscription sends 10% to a cause you care about. Here&apos;s what we&apos;ve done together.
+            Every subscription sends 10% to a cause you care about. Here is what we have done together.
           </p>
         </div>
 
-        {/* Stats */}
         <div className="mb-20 grid gap-8 sm:grid-cols-3">
-          {statItems.map((item, i) => {
+          {statItems.map((item) => {
             const Icon = item.icon;
             return (
               <m.div
                 key={item.label}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.4 }}
+                variants={fadeIn}
                 className="rounded-2xl border border-border bg-background p-8 text-center"
               >
                 <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl border border-border bg-muted">
@@ -66,8 +83,7 @@ export function ImpactSection({ featuredCharities, stats }: CharitiesShowcasePro
           })}
         </div>
 
-        {/* Featured Charities */}
-        {featuredCharities.length > 0 && (
+        {featuredCharities.length > 0 ? (
           <div>
             <div className="mb-8 flex items-center justify-between">
               <h3 className="font-heading text-2xl font-bold">Featured charities</h3>
@@ -80,15 +96,12 @@ export function ImpactSection({ featuredCharities, stats }: CharitiesShowcasePro
             </div>
 
             <div className="grid gap-6 md:grid-cols-3">
-              {featuredCharities.map((charity, i) => {
+              {featuredCharities.map((charity) => {
                 const cover = charity.images?.[0] || null;
                 return (
                   <m.div
                     key={charity.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1, duration: 0.5 }}
+                    variants={fadeIn}
                   >
                     <Link
                       href={`/charities/${charity.id}`}
@@ -121,8 +134,10 @@ export function ImpactSection({ featuredCharities, stats }: CharitiesShowcasePro
               })}
             </div>
           </div>
+        ) : (
+          <Skeleton />
         )}
       </div>
-    </section>
+    </m.section>
   );
 }

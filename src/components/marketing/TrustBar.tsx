@@ -2,44 +2,31 @@
 
 import { m } from "framer-motion";
 import { Users, HandCoins, ShieldCheck, Scale } from "lucide-react";
+import { fadeIn, stagger } from "@/lib/motion";
 
 const stats = [
-  {
-    icon: Users,
-    value: "1,247",
-    label: "Active players",
-  },
-  {
-    icon: HandCoins,
-    value: "£48k",
-    label: "Donated to charity",
-  },
-  {
-    icon: ShieldCheck,
-    value: "Verified",
-    label: "by Stripe",
-  },
-  {
-    icon: Scale,
-    value: "Exempt",
-    label: "UK Gambling Commission",
-  },
+  { icon: Users, value: "1,247", label: "Active players" },
+  { icon: HandCoins, value: "£48k", label: "Donated to charity" },
+  { icon: ShieldCheck, value: "Verified", label: "by Stripe" },
+  { icon: Scale, value: "Exempt", label: "UK Gambling Commission" },
 ];
 
 export function TrustBar() {
   return (
-    <section className="border-y border-border bg-muted/50">
+    <m.section
+      initial="hidden"
+      whileInView="show"
+      viewport={{ once: true, margin: "-100px" }}
+      className="border-y border-border bg-muted/50"
+    >
       <div className="mx-auto max-w-[1200px] px-6 py-8">
-        <div className="grid grid-cols-2 gap-6 md:grid-cols-4">
-          {stats.map((stat, i) => {
+        <m.div variants={stagger} className="grid grid-cols-2 gap-6 md:grid-cols-4">
+          {stats.map((stat) => {
             const Icon = stat.icon;
             return (
               <m.div
                 key={stat.label}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.4 }}
+                variants={fadeIn}
                 className="flex items-center gap-3"
               >
                 <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg border border-border bg-background">
@@ -52,8 +39,8 @@ export function TrustBar() {
               </m.div>
             );
           })}
-        </div>
+        </m.div>
       </div>
-    </section>
+    </m.section>
   );
 }

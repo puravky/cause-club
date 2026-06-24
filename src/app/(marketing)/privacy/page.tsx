@@ -65,8 +65,8 @@ export default function PrivacyPage() {
             </ul>
             <p className="mt-2">
               To exercise any of these rights, contact us at{" "}
-              <a href="mailto:hello@paritygolf.com" className="underline underline-offset-4 hover:text-ink transition-colors">
-                hello@paritygolf.com
+              <a href="mailto:hello@causeclub.com" className="underline underline-offset-4 hover:text-ink transition-colors">
+                hello@causeclub.com
               </a>. We will respond within 30 days.
             </p>
           </section>
@@ -81,10 +81,10 @@ export default function PrivacyPage() {
           <section>
             <h2 className="font-heading text-xl font-semibold text-ink mb-3">7. Contact</h2>
             <p>
-              Data controller: Parity Golf Ltd<br />
+              Data controller: causeClub Ltd<br />
               Email:{" "}
-              <a href="mailto:hello@paritygolf.com" className="underline underline-offset-4 hover:text-ink transition-colors">
-                hello@paritygolf.com
+              <a href="mailto:hello@causeclub.com" className="underline underline-offset-4 hover:text-ink transition-colors">
+                hello@causeclub.com
               </a>
             </p>
           </section>

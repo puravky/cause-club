@@ -9,10 +9,10 @@ export default function TermsPage() {
           <section>
             <h2 className="font-heading text-xl font-semibold text-ink mb-3">1. Introduction</h2>
             <p>
-              Welcome to causeClub (operated by Parity Golf Ltd). By subscribing to our service, you agree to be bound by these Terms of Service. If you do not agree, please do not use our service.
+              Welcome to causeClub. By subscribing to our service, you agree to be bound by these Terms of Service. If you do not agree, please do not use our service.
             </p>
             <p className="mt-2">
-              causeClub is a monthly golf score draw that combines charitable giving with the chance to win prizes based on your on-course performance.
+              causeClub is a monthly prize draw that combines charitable giving with the chance to win prizes.
             </p>
           </section>
 
@@ -61,7 +61,7 @@ export default function TermsPage() {
           <section>
             <h2 className="font-heading text-xl font-semibold text-ink mb-3">6. Limitation of Liability</h2>
             <p>
-              causeClub is provided on an &quot;as is&quot; basis. To the maximum extent permitted by law, Parity Golf Ltd disclaims all warranties, express or implied. We are not liable for any indirect, incidental, or consequential damages arising from your use of the service.
+              causeClub is provided on an &quot;as is&quot; basis. To the maximum extent permitted by law, causeClub Ltd disclaims all warranties, express or implied. We are not liable for any indirect, incidental, or consequential damages arising from your use of the service.
             </p>
           </section>
 
@@ -76,8 +76,8 @@ export default function TermsPage() {
             <h2 className="font-heading text-xl font-semibold text-ink mb-3">8. Contact</h2>
             <p>
               For questions about these terms, please contact us at{" "}
-              <a href="mailto:hello@paritygolf.com" className="underline underline-offset-4 hover:text-ink transition-colors">
-                hello@paritygolf.com
+              <a href="mailto:hello@causeclub.com" className="underline underline-offset-4 hover:text-ink transition-colors">
+                hello@causeclub.com
               </a>.
             </p>
           </section>

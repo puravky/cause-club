@@ -4,7 +4,7 @@ export function Footer() {
   return (
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-[1200px] px-6 py-16">
-        <div className="grid gap-10 sm:grid-cols-3">
+        <div className="grid gap-10 sm:grid-cols-4">
           <div>
             <Link href="/" className="font-heading text-lg font-bold">
               causeClub
@@ -16,23 +16,22 @@ export function Footer() {
 
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Legal
+              Product
             </h4>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link
-                  href="/terms"
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Terms of Service
+                <Link href="/#how" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  How it works
                 </Link>
               </li>
               <li>
-                <Link
-                  href="/privacy"
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Privacy Policy
+                <Link href="/pricing" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/draws" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  Winners
                 </Link>
               </li>
             </ul>
@@ -40,28 +39,51 @@ export function Footer() {
 
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Support
+              Company
             </h4>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link
-                  href="/contact"
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  Contact Us
+                <Link href="/charities" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  Charities
                 </Link>
               </li>
               <li>
-                <span className="text-sm text-muted-foreground/50">Discord (coming soon)</span>
+                <Link href="/contact" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              Legal
+            </h4>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <Link href="/terms" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link href="/privacy" className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  Privacy Policy
+                </Link>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 border-t border-border pt-6">
+        <div className="mt-12 flex flex-col gap-2 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground/60">
-            &copy; {new Date().getFullYear()} Parity Golf Ltd. All rights reserved.
+            &copy; {new Date().getFullYear()} causeClub Ltd. All rights reserved.
           </p>
+          <a
+            href="mailto:hello@causeclub.com"
+            className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+          >
+            hello@causeclub.com
+          </a>
         </div>
       </div>
     </footer>

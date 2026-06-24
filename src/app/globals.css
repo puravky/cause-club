@@ -64,6 +64,10 @@
 }
 
 @layer utilities {
+  .will-change-transform {
+    will-change: transform;
+  }
+
   .bg-grid {
     background-image: 
       linear-gradient(rgba(255,92,53,0.03) 1px, transparent 1px),

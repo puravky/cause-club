@@ -144,8 +144,8 @@ export default function ContactPage() {
           <ul className="mt-3 space-y-2 text-sm text-[#6B7280]">
             <li>
               Email:{" "}
-              <a href="mailto:hello@paritygolf.com" className="underline underline-offset-4 hover:text-ink transition-colors">
-                hello@paritygolf.com
+              <a href="mailto:hello@causeclub.com" className="underline underline-offset-4 hover:text-ink transition-colors">
+                hello@causeclub.com
               </a>
             </li>
             <li>

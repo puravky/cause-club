@@ -4,7 +4,9 @@ import { TrustBar } from "@/components/marketing/TrustBar";
 import { HowItWorks } from "@/components/marketing/HowItWorks";
 import { ImpactSection } from "@/components/marketing/ImpactSection";
 import { Testimonials } from "@/components/marketing/Testimonials";
+import { PricingSection } from "@/components/marketing/PricingSection";
 import { Faq } from "@/components/marketing/Faq";
+import { FinalCta } from "@/components/marketing/FinalCta";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function MarketingPage() {
@@ -46,7 +48,9 @@ export default async function MarketingPage() {
           }}
         />
         <Testimonials />
+        <PricingSection />
         <Faq />
+        <FinalCta />
       </main>
     </>
   );

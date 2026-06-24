@@ -1,118 +1,114 @@
-# causeClub. Play. Win. Give.
+# causeClub — Play. Win. Give.
+Monthly prize draw where 10% always goes to charity you choose.
 
-Monthly prize draw where 10% of every subscription goes to the charity you choose. Built for the Digital Heroes internship program.
-
-**Live:** https://cause-club.vercel.app  
-**60s Demo:** [Loom link]  
-**GitHub:** [repo link]
+Live Link: https://cause-club.vercel.app  
 
 ---
 
-## Test Credentials
+## ⚡ Test in 60 Seconds
 
-Use these to test the full flow instantly. Stripe in test mode.
-
-| Role | Email | Password | Notes |
+| Role | Email | Password | What to test |
 | --- | --- | --- | --- |
-| User | demo@causeclub.com | Demo123! | Active subscription, 5 scores, won last draw |
-| Admin | admin@causeclub.com | Admin123! | Access /admin to simulate draws |
+| User | demo@causeclub.com | Demo123! | Dashboard, add scores, view draws, claim win |
+| Admin | admin@causeclub.com | Admin123! | /admin/draws, simulate + publish, approve proof |
 
-**Stripe test card:** 4242 4242 4242 4242. Any future expiry. Any CVC.
+Stripe test card: `4242 4242 4242 4242` any future expiry, any CVC, any ZIP.
 
----
-
-## Core User Flows
-
-1. Sign up at /signup. Pick a charity at 25% slider. Subscribe at £9.99/mo via Stripe Checkout
-2. Log 5 Stableford scores (1-45) at /dashboard/scores. Oldest drops automatically via DB trigger
-3. Admin simulates monthly draw at /admin/draws. 5 random numbers. Prize split 40/35/25 with jackpot rollover
-4. Matched winners upload verification proof at /dashboard/draws/[id]/claim. Admin approves or disputes
-5. 10% of all revenue tracked per charity at /dashboard/charity and /admin/charities/reports
+**Quick test flow:**
+1. Login as demo@causeclub.com → `/dashboard/scores` → add 5 scores: 10, 20, 30, 40, 45
+2. Login as admin@causeclub.com → `/admin/draws` → Simulate Draw → Publish
+3. Login as demo@causeclub.com → `/dashboard/draws` → see if you won → Claim → upload any jpg
+4. Login as admin@causeclub.com → `/admin/winners` → Approve
+5. Check Supabase `donations` table → verify 10% of subscription recorded
 
 ---
 
-## Tech Stack
+## 🎯 How It Works
 
-| Layer | Tech | Why |
+**User Journey:**
+1. `/signup` → Pick charity and set donation 10-100%
+2. `/pricing` → Subscribe £9.99/mo or £89.99/yr via Stripe Checkout
+3. `/dashboard/scores` → Add Stableford scores 1-45. Last 5 automatically kept
+4. Auto-entered into monthly draw if subscription active and 5 scores logged
+5. `/dashboard/draws` → View results. Match 3, 4, or 5 numbers to win
+6. `/dashboard/draws/:id/claim` → Upload proof if you win
+
+**Admin Journey:**
+1. `/admin` → View total users, active subs, donations, jackpot
+2. `/admin/draws` → Simulate draw with RNG, then Publish to all users
+3. `/admin/winners` → Review uploaded proof, Approve or Reject claims
+4. `/admin/charities` → Add, edit, or disable charities
+5. `/admin/reports` → Export CSV of donations by charity and date
+
+**Key Routes:**
+
+| Route | Purpose | Auth Required |
 | --- | --- | --- |
-| Framework | Next.js 14 App Router | SSR, RSC, file-based routing |
-| DB / Auth | Supabase Postgres + RLS | Row-level security, real-time subscriptions |
-| Payments | Stripe Checkout + Webhooks | PCI compliant, idempotent event handling |
-| UI | Tailwind + shadcn + Framer Motion | Fast iteration, accessible, premium feel |
-| Email | Resend + React Email | Transactional reliability, auditable logs |
-| Deploy | Vercel | Edge functions, instant previews, zero config |
+| `/` | Landing page, signup CTA | No |
+| `/signup` | Create account, charity selection | No |
+| `/login` | Sign in | No |
+| `/pricing` | Stripe Checkout redirect | Yes |
+| `/dashboard` | User stats, recent activity | User |
+| `/dashboard/scores` | Add scores, view last 5 | User |
+| `/dashboard/draws` | Draw history, claim winnings | User |
+| `/dashboard/charity` | Change charity, update % | User |
+| `/charities` | Public charity directory | No |
+| `/draws` | Public past draw results | No |
+| `/admin` | Admin overview | Admin |
+| `/admin/draws` | Run draws, view history | Admin |
+| `/admin/winners` | Verify winner claims | Admin |
+| `/admin/charities` | CRUD charities | Admin |
+| `/admin/reports` | Export donation data | Admin |
+| `/api/stripe/webhook` | Handles payments + donations | Stripe |
+| `/terms` | Legal terms | No |
+| `/privacy` | Privacy policy | No |
+| `/contact` | Contact form | No |
+| `/responsible` | Responsible play info | No |
 
 ---
 
-## PRD Compliance
+## ✓ Digital Heroes PRD Compliance
 
-| Requirement | Status | Location |
+| Requirement | Status | File |
 | --- | --- | --- |
-| £9.99/mo or £89.99/yr subscription | Done | /pricing, Stripe price IDs in .env |
-| 10% minimum to charity | Done | /api/stripe/webhook/route.ts#L45 |
-| Last 5 Stableford scores only | Done | Supabase migration 002 (trigger) |
-| Monthly draw with 40/35/25 split | Done | /admin/draws/actions.ts |
-| Jackpot rollover if no 5-match winner | Done | /admin/draws/actions.ts#L89 |
-| Winner verification with proof upload | Done | /dashboard/draws/[drawId]/claim |
-| RLS on all tables | Done | Supabase policies.sql |
-| Admin panel for charities and draws | Done | /app/(admin)/admin |
+| £9.99/mo or £89.99/yr subscription | Done | `/app/(marketing)/pricing/page.tsx` |
+| 10% minimum to charity enforced | Done | `/app/api/stripe/webhook/route.ts#L45` |
+| User picks charity + percentage at signup | Done | `/app/(auth)/signup/page.tsx` |
+| Last 5 Stableford scores only | Done | `/supabase/migrations/002_trigger.sql` |
+| Auto entry to monthly draw | Done | Draw logic checks active subs + score count |
+| Prize split 40/35/25 for 5/4/3 matches | Done | `/app/(admin)/admin/draws/actions.ts#L89` |
+| Jackpot rollover if no 5-match winner | Done | `/app/(admin)/admin/draws/actions.ts` |
+| Winner verification with proof upload | Done | `/app/(dashboard)/dashboard/draws/[id]/claim/page.tsx` |
+| RLS on all user tables | Done | `/supabase/policies.sql` |
+| Admin panel for charities and draws | Done | `/app/(admin)/admin` |
+| Transactional emails via Resend | Done | `/src/lib/email.ts`, `/src/emails/*` |
 | New Vercel + Supabase accounts | Done | Deployed 24 June 2026 |
+| Legal pages | Done | `/app/(marketing)/terms`, `/privacy` |
+| Responsible play info | Done | `/app/(marketing)/responsible/page.tsx` |
 
 ---
 
-## Local Setup
+## 🛠 Tech Stack
 
+| Layer | Tech | Reason |
+| --- | --- | --- |
+| Framework | Next.js 14 App Router | SSR, RSC, server actions |
+| Database | Supabase Postgres | Row Level Security, triggers |
+| Auth | Supabase Auth | Email password, RLS integration |
+| Payments | Stripe Checkout + Webhooks | PCI compliant, subscriptions |
+| UI | Tailwind + shadcn/ui | Fast styling, accessible components |
+| Animation | Framer Motion | Premium interactions |
+| Email | Resend + React Email | Typed templates, audit trail |
+| Storage | Supabase Storage | Private bucket for proof uploads |
+| Deploy | Vercel | Edge functions, preview deploys |
+| Testing | Playwright + Vitest | E2E user flows + unit tests |
+
+---
+
+## 💻 Local Setup
+
+**1. Clone and install**
 ```bash
-git clone https://github.com/user/cause-club
+git clone https://github.com/yourusername/cause-club
 cd cause-club
 bun install
-cp .env.example .env.local
-```
-
-Fill `.env.local` with your Supabase project URL, anon key, service role key, and Stripe test keys.
-
-```bash
-bun run dev
-```
-
-Open http://localhost:3000.
-
----
-
-## Project Structure
-
-```
-src/
-  app/
-    (marketing)/         Landing, pricing, charities, contact
-    (dashboard)/         Scores, draws, charity settings (auth required)
-    (admin)/             Draws, charities, reports, users (admin only)
-    api/                 Stripe webhook, checkout, cron, admin exports
-    login, signup        Auth pages
-  components/
-    marketing/           Navbar, Hero, HowItWorks, TrustBar, Testimonials, Faq
-    ui/                  Button, Card, Dialog, Input, Sonner (shadcn)
-    providers/           ThemeProvider (dark mode), MotionProvider (Framer)
-  lib/
-    supabase/            Server/client/service clients
-    stripe.ts            Stripe SDK singleton
-    utils.ts             cn() helper
-  middleware.ts          Route protection, redirect logic
-scripts/
-  security-check.ts      3 checks: secret scan, RLS, webhook validation
-tests/
-  e2e/flows.spec.ts      5 Playwright specs (signup, scores, admin draw, claim, charity)
-lighthouserc.js          Lighthouse CI config (a11y 100, perf 90)
-```
-
----
-
-## Scripts
-
-| Command | What |
-| --- | --- |
-| `bun run dev` | Local dev server |
-| `bun run build` | Production build |
-| `bun run test:e2e` | Playwright E2E suite |
-| `bun run test:security` | Secret scan, RLS check, webhook validation |
-| `bun run verify` | Full CI pipeline (build -> security -> e2e -> lighthouse) |

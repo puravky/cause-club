@@ -32,23 +32,24 @@ function createMiddlewareClient(request: NextRequest) {
   return { supabase, response };
 }
 
-/* ─── Protected route prefixes ──────────────── */
-const PROTECTED_ROUTES = ["/dashboard", "/admin", "/onboarding", "/settings"];
+/* ─── Config ──────────────────────────────────── */
+const AUTH_ROUTES = ["/onboarding"];
+const AUTH_SUB_ROUTES = ["/dashboard", "/admin", "/settings"];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Skip non-protected routes
-  const isProtected = PROTECTED_ROUTES.some((route) =>
-    pathname.startsWith(route)
-  );
-  if (!isProtected) {
+  // 1. Only intercept routes that need auth or auth+sub
+  const isAuthRoute = AUTH_ROUTES.some((r) => pathname.startsWith(r));
+  const isAuthSubRoute = AUTH_SUB_ROUTES.some((r) => pathname.startsWith(r));
+
+  if (!isAuthRoute && !isAuthSubRoute) {
     return NextResponse.next();
   }
 
   const { supabase, response } = createMiddlewareClient(request);
 
-  // ── 1. Session check ──────────────────────────
+  // 2. Session check
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -60,33 +61,43 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  // ── 2. Fetch user profile for subscription + role ──
+  // 3. Fetch profile
   const { data: profile } = await supabase
     .from("users")
     .select("subscription_status, role, charity_id")
     .eq("id", user.id)
     .single();
 
-  // ── 3. Admin route guard (check BEFORE subscription) ──
-  if (pathname.startsWith("/admin") && profile?.role !== "admin") {
+  // 4. If profile is null (row missing)
+  if (!profile) {
+    if (pathname.startsWith("/admin")) {
+      const dashboardUrl = request.nextUrl.clone();
+      dashboardUrl.pathname = "/dashboard";
+      return NextResponse.redirect(dashboardUrl);
+    }
+    return NextResponse.next();
+  }
+
+  // 5. Admin route guard
+  if (pathname.startsWith("/admin") && profile.role !== "admin") {
     const dashboardUrl = request.nextUrl.clone();
     dashboardUrl.pathname = "/dashboard";
     return NextResponse.redirect(dashboardUrl);
   }
 
-  // ── 4. Subscription validation (PRD §4: real-time on every request) ──
-  const activeStatuses = ["active", "trialing"];
-  const hasActiveSubscription =
-    profile?.subscription_status &&
-    activeStatuses.includes(profile.subscription_status);
-
-  if (!hasActiveSubscription) {
-    const pricingUrl = request.nextUrl.clone();
-    pricingUrl.pathname = "/pricing";
-    return NextResponse.redirect(pricingUrl);
+  // 6. Subscription check — skip for /onboarding
+  if (!pathname.startsWith("/onboarding")) {
+    const isActive = ["active", "trialing"].includes(
+      profile?.subscription_status ?? ""
+    );
+    if (!isActive) {
+      const pricingUrl = request.nextUrl.clone();
+      pricingUrl.pathname = "/pricing";
+      return NextResponse.redirect(pricingUrl);
+    }
   }
 
-  // ── 5. Onboarding / Charity selection guard ───
+  // 7. Charity guard — only for /dashboard routes
   if (pathname.startsWith("/dashboard") && !profile?.charity_id) {
     const onboardingUrl = request.nextUrl.clone();
     onboardingUrl.pathname = "/onboarding";

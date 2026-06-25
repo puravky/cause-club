@@ -258,7 +258,7 @@ export async function simulateDraw({
   const drawnNumbers = await generateDrawNumbers(drawType);
 
   // 4. Create new draw entry
-  const dbDrawType = drawType === "random" ? "random" : "algorithm";
+  const dbDrawType = drawType === "random" ? "random" : "algorithmic";
   const { data: newDraw, error: drawCreateErr } = await supabase
     .from("draws")
     .insert({

@@ -105,7 +105,7 @@ export async function cancelStripeSubscription(userId: string) {
 
     const { error: updateErr } = await supabase
       .from("users")
-      .update({ subscription_status: "canceled" })
+      .update({ subscription_status: "cancelled" })
       .eq("id", userId);
 
     if (updateErr) throw updateErr;

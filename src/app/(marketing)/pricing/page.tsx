@@ -1,6 +1,26 @@
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
 import { SubscribeButton } from "@/components/marketing/SubscribeButton";
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const supabase = await createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from("users")
+      .select("subscription_status")
+      .eq("id", user.id)
+      .single();
+
+    if (
+      profile?.subscription_status === "active" ||
+      profile?.subscription_status === "trialing"
+    ) {
+      redirect("/dashboard");
+    }
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-paper px-4">
       <div className="max-w-md text-center">

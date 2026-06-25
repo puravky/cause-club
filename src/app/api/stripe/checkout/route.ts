@@ -30,7 +30,7 @@ export async function POST(req: Request) {
         charityPercentage: charityPercentage ? String(charityPercentage) : "10",
         priceId,
       },
-      success_url: `${origin}/dashboard?checkout_success=true`,
+      success_url: `${origin}/checkout/success`,
       cancel_url: `${origin}/pricing?checkout_cancelled=true`,
     });
 

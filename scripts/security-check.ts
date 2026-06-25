@@ -43,12 +43,12 @@ async function secretScan(): Promise<CheckResult> {
       const patterns = [
         /sk_live_[A-Za-z0-9]{10,}/,
         /pk_live_[A-Za-z0-9]{10,}/,
-        /SUPABASE_SERVICE_ROLE_KEY\s*[:=]\s*["'][^"']+["']/,
+        /SUPABASE_SECRET_KEY\s*[:=]\s*["'][^"']+["']/,
         /STRIPE_SECRET_KEY\s*[:=]\s*["'][^"']+["']/,
         /STRIPE_WEBHOOK_SECRET\s*[:=]\s*["'][^"']+["']/,
         /RESEND_API_KEY\s*[:=]\s*["'][^"']+["']/,
         /CRON_SECRET\s*[:=]\s*["'][^"']+["']/,
-        /service_role_key.*["'][^"']+["']/i,
+        /secret_key.*["'][^"']+["']/i,
       ];
 
       for (const re of patterns) {
@@ -72,13 +72,13 @@ async function secretScan(): Promise<CheckResult> {
 
 async function rlsCheck(): Promise<CheckResult> {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
   if (!url || !anonKey) {
     return {
       name: "RLS policy check",
       passed: false,
-      detail: "NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY not set",
+      detail: "NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY not set",
     };
   }
 

@@ -2,9 +2,9 @@
 
 ## Prerequisites
 
-- Node 18+ with `npm`
+- Node 18+ with `bun`
 - `bun` (for security checks)
-- Playwright browsers installed (`npx playwright install chromium`)
+- Playwright browsers installed (`bunx playwright install chromium`)
 - Supabase project with test users seeded
 - Stripe test keys configured in `.env`
 - A running production build on port 3000
@@ -13,8 +13,8 @@
 
 ```bash
 NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+SUPABASE_SECRET_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
 STRIPE_PRICE_YEARLY=
@@ -36,7 +36,7 @@ RESEND_API_KEY=
 ### E2E (Playwright)
 
 ```bash
-npm run test:e2e
+bun run test:e2e
 ```
 
 Runs all specs in `tests/e2e/`. Configuration in `playwright.config.ts`.
@@ -44,7 +44,7 @@ Runs all specs in `tests/e2e/`. Configuration in `playwright.config.ts`.
 ### Security checks
 
 ```bash
-npm run test:security
+bun run test:security
 ```
 
 Scans source for hardcoded secrets, verifies RLS blocks anon reads, and checks that the Stripe webhook endpoint rejects unsigned requests.
@@ -52,7 +52,7 @@ Scans source for hardcoded secrets, verifies RLS blocks anon reads, and checks t
 ### Lighthouse CI
 
 ```bash
-npm run test:lh
+bun run test:lh
 ```
 
 Runs Lighthouse against the production build. Asserts accessibility=100, performance≥90.
@@ -60,7 +60,7 @@ Runs Lighthouse against the production build. Asserts accessibility=100, perform
 ### Full pipeline
 
 ```bash
-npm run verify
+bun run verify
 ```
 
 Sequential: build → security → e2e → lighthouse. Exits on first failure.
